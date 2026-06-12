@@ -1,58 +1,58 @@
 const express = require('express');
 const router = express.Router();
+const Rutina = require('../models/Rutina');
 const Socio = require('../models/Socio');
 const auth = require('../middleware/auth');
 
-// Aplicar auth a todas las rutas
 router.use(auth);
 
-// Listar
+const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
 router.get('/', async (req, res) => {
-  const socios = await Socio.find().sort({ createdAt: -1 });
-  res.render('socios/index', { socios });
+  const rutinas = await Rutina.find().populate('socio').sort({ createdAt: -1 });
+  res.render('rutinas/index', { rutinas });
 });
 
-// Formulario crear
-router.get('/nuevo', (req, res) => res.render('socios/form', { socio: null, error: null }));
+router.get('/nueva', async (req, res) => {
+  const socios = await Socio.find({ activo: true });
+  res.render('rutinas/form', { rutina: null, socios, dias: DIAS, error: null });
+});
 
-// Crear
 router.post('/', async (req, res) => {
   try {
-    await Socio.create(req.body);
-    res.redirect('/socios');
+    const data = { ...req.body };
+    // diasSemana puede venir como string si solo se selecciona uno
+    if (typeof data.diasSemana === 'string') data.diasSemana = [data.diasSemana];
+    await Rutina.create(data);
+    res.redirect('/rutinas');
   } catch (err) {
-    res.render('socios/form', { socio: null, error: 'Verifica los datos ingresados' });
+    const socios = await Socio.find({ activo: true });
+    res.render('rutinas/form', { rutina: null, socios, dias: DIAS, error: 'Verifica los datos' });
   }
 });
 
-// Ver detalle
-router.get('/:id', async (req, res) => {
-  const socio = await Socio.findById(req.params.id);
-  const rutinas = await require('../models/Rutina').find({ socio: req.params.id });
-  res.render('socios/show', { socio, rutinas });
-});
-
-// Formulario editar
 router.get('/:id/editar', async (req, res) => {
-  const socio = await Socio.findById(req.params.id);
-  res.render('socios/form', { socio, error: null });
+  const rutina = await Rutina.findById(req.params.id);
+  const socios = await Socio.find({ activo: true });
+  res.render('rutinas/form', { rutina, socios, dias: DIAS, error: null });
 });
 
-// Actualizar
 router.put('/:id', async (req, res) => {
   try {
-    await Socio.findByIdAndUpdate(req.params.id, req.body, { runValidators: true });
-    res.redirect('/socios');
+    const data = { ...req.body };
+    if (typeof data.diasSemana === 'string') data.diasSemana = [data.diasSemana];
+    await Rutina.findByIdAndUpdate(req.params.id, data, { runValidators: true });
+    res.redirect('/rutinas');
   } catch (err) {
-    const socio = await Socio.findById(req.params.id);
-    res.render('socios/form', { socio, error: 'Verifica los datos' });
+    const socios = await Socio.find({ activo: true });
+    const rutina = await Rutina.findById(req.params.id);
+    res.render('rutinas/form', { rutina, socios, dias: DIAS, error: 'Verifica los datos' });
   }
 });
 
-// Eliminar
 router.delete('/:id', async (req, res) => {
-  await Socio.findByIdAndDelete(req.params.id);
-  res.redirect('/socios');
+  await Rutina.findByIdAndDelete(req.params.id);
+  res.redirect('/rutinas');
 });
 
 module.exports = router;
