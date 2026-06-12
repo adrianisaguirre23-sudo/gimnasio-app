@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Registro — GimApp</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #1a1a2e; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .card { background: white; padding: 2rem; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    h1 { text-align: center; color: #e94560; margin-bottom: 1.5rem; }
-    label { display: block; margin-bottom: 0.3rem; font-weight: bold; color: #333; }
-    input { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 1rem; font-size: 1rem; }
-    button { width: 100%; padding: 0.8rem; background: #e94560; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
-    .error { background: #fee; color: #c00; padding: 0.7rem; border-radius: 6px; margin-bottom: 1rem; }
-    .link { text-align: center; margin-top: 1rem; }
-    a { color: #e94560; }
-  </style>
+<meta charset="UTF-8">
+<title>Dashboard GimApp</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f5f5f5; }
+nav { background: #1a1a2e; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+nav h1 { color: #e94560; }
+nav a { color: white; text-decoration: none; margin-left: 1rem; }
+.container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+h2 { margin-bottom: 1.5rem; color: #333; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.card { background: white; border-radius: 12px; padding: 2rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-decoration: none; color: #333; }
+.card h3 { font-size: 1.3rem; color: #e94560; }
+.card p { color: #666; margin-top: 0.5rem; }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>🏋️ Crear cuenta</h1>
-    <% if (error) { %><div class="error"><%= error %></div><% } %>
-    <form action="/auth/register" method="POST">
-      <label>Nombre</label>
-      <input type="text" name="nombre" required>
-      <label>Email</label>
-      <input type="email" name="email" required>
-      <label>Contraseña</label>
-      <input type="password" name="password" required minlength="6">
-      <button type="submit">Registrarse</button>
-    </form>
-    <div class="link"><a href="/auth/login">¿Ya tienes cuenta? Inicia sesión</a></div>
-  </div>
+<nav>
+<h1>GimApp</h1>
+<div>
+<span>Hola, <%= user %>!</span>
+<a href="/socios">Socios</a>
+<a href="/rutinas">Rutinas</a>
+<a href="/auth/logout">Cerrar sesion</a>
+</div>
+</nav>
+<div class="container">
+<h2>Panel de control</h2>
+<div class="grid">
+<a href="/socios" class="card">
+<h3>Socios</h3>
+<p>Gestiona los miembros del gimnasio</p>
+</a>
+<a href="/rutinas" class="card">
+<h3>Rutinas</h3>
+<p>Administra las rutinas de entrenamiento</p>
+</a>
+</div>
+</div>
 </body>
 </html>
