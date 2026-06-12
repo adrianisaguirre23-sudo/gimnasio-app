@@ -1,80 +1,54 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title><%= rutina ? 'Editar' : 'Nueva' %> Rutina — GimApp</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Arial, sans-serif; background: #f5f5f5; }
-    nav { background: #1a1a2e; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; }
-    nav h1 { color: #e94560; }
-    nav a { color: white; text-decoration: none; margin-left: 1rem; }
-    .container { max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
-    .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h2 { margin-bottom: 1.5rem; color: #333; }
-    label { display: block; margin-bottom: 0.3rem; font-weight: bold; color: #555; }
-    input, select, textarea { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 1rem; font-size: 1rem; }
-    .dias-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
-    .dia-check { display: flex; align-items: center; gap: 0.4rem; }
-    .dia-check input { width: auto; margin: 0; }
-    .btn { padding: 0.7rem 1.5rem; border-radius: 6px; border: none; cursor: pointer; font-size: 1rem; text-decoration: none; }
-    .btn-primary { background: #e94560; color: white; }
-    .btn-secondary { background: #6c757d; color: white; margin-left: 0.5rem; }
-    .error { background: #fee; color: #c00; padding: 0.7rem; border-radius: 6px; margin-bottom: 1rem; }
-  </style>
+<meta charset="UTF-8">
+<title>Socio GimApp</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f5f5f5; }
+nav { background: #1a1a2e; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; }
+nav h1 { color: #e94560; }
+nav a { color: white; text-decoration: none; margin-left: 1rem; }
+.container { max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+.card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+h2 { margin-bottom: 1.5rem; color: #333; }
+label { display: block; margin-bottom: 0.3rem; font-weight: bold; color: #555; }
+input, select { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 1rem; font-size: 1rem; }
+.btn { padding: 0.7rem 1.5rem; border-radius: 6px; border: none; cursor: pointer; font-size: 1rem; text-decoration: none; display: inline-block; }
+.btn-primary { background: #e94560; color: white; }
+.btn-secondary { background: #6c757d; color: white; margin-left: 0.5rem; }
+.error { background: #fee; color: #c00; padding: 0.7rem; border-radius: 6px; margin-bottom: 1rem; }
+</style>
 </head>
 <body>
-  <nav>
-    <h1>🏋️ GimApp</h1>
-    <div><a href="/rutinas">← Rutinas</a></div>
-  </nav>
-  <div class="container">
-    <div class="card">
-      <h2><%= rutina ? 'Editar rutina' : 'Nueva rutina' %></h2>
-      <% if (error) { %><div class="error"><%= error %></div><% } %>
-      <form action="/rutinas<%= rutina ? '/' + rutina._id + '?_method=PUT' : '' %>" method="POST">
-        <label>Nombre de la rutina</label>
-        <input type="text" name="nombre" required value="<%= rutina ? rutina.nombre : '' %>">
-        
-        <label>Descripción</label>
-        <textarea name="descripcion" required rows="3"><%= rutina ? rutina.descripcion : '' %></textarea>
-        
-        <label>Socio asignado</label>
-        <select name="socio" required>
-          <option value="">Selecciona un socio...</option>
-          <% socios.forEach(s => { %>
-            <option value="<%= s._id %>" <%= rutina && rutina.socio && rutina.socio.toString() === s._id.toString() ? 'selected' : '' %>>
-              <%= s.nombre %>
-            </option>
-          <% }) %>
-        </select>
-        
-        <label>Días de la semana</label>
-        <div class="dias-grid">
-          <% dias.forEach(d => { %>
-          <div class="dia-check">
-            <input type="checkbox" name="diasSemana" value="<%= d %>" 
-              <%= rutina && rutina.diasSemana.includes(d) ? 'checked' : '' %>>
-            <span><%= d %></span>
-          </div>
-          <% }) %>
-        </div>
-        
-        <label>Duración (minutos)</label>
-        <input type="number" name="duracionMinutos" required min="10" max="300" value="<%= rutina ? rutina.duracionMinutos : '' %>">
-        
-        <label>Nivel</label>
-        <select name="nivel" required>
-          <option value="">Selecciona...</option>
-          <% ['principiante','intermedio','avanzado'].forEach(n => { %>
-            <option value="<%= n %>" <%= rutina && rutina.nivel === n ? 'selected' : '' %>><%= n %></option>
-          <% }) %>
-        </select>
-        
-        <button type="submit" class="btn btn-primary"><%= rutina ? 'Actualizar' : 'Crear' %> rutina</button>
-        <a href="/rutinas" class="btn btn-secondary">Cancelar</a>
-      </form>
-    </div>
-  </div>
+<nav>
+<h1>GimApp</h1>
+<div><a href="/socios">Socios</a></div>
+</nav>
+<div class="container">
+<div class="card">
+<h2><%= socio ? 'Editar socio' : 'Nuevo socio' %></h2>
+<% if (error) { %><div class="error"><%= error %></div><% } %>
+<form action="/socios<%= socio ? '/' + socio._id + '?_method=PUT' : '' %>" method="POST">
+<label>Nombre</label>
+<input type="text" name="nombre" required value="<%= socio ? socio.nombre : '' %>">
+<label>Email</label>
+<input type="email" name="email" required value="<%= socio ? socio.email : '' %>">
+<label>Telefono</label>
+<input type="text" name="telefono" required value="<%= socio ? socio.telefono : '' %>">
+<label>Fecha de nacimiento</label>
+<input type="date" name="fechaNacimiento" required value="<%= socio ? socio.fechaNacimiento.toISOString().split('T')[0] : '' %>">
+<label>Membresia</label>
+<select name="membresia" required>
+<option value="">Selecciona...</option>
+<option value="mensual" <%= socio && socio.membresia === 'mensual' ? 'selected' : '' %>>mensual</option>
+<option value="trimestral" <%= socio && socio.membresia === 'trimestral' ? 'selected' : '' %>>trimestral</option>
+<option value="anual" <%= socio && socio.membresia === 'anual' ? 'selected' : '' %>>anual</option>
+</select>
+<button type="submit" class="btn btn-primary"><%= socio ? 'Actualizar' : 'Crear' %> socio</button>
+<a href="/socios" class="btn btn-secondary">Cancelar</a>
+</form>
+</div>
+</div>
 </body>
 </html>
