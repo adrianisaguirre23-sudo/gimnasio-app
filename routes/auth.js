@@ -15,7 +15,8 @@ router.post('/register', async (req, res) => {
     req.session.userName = user.nombre;
     res.redirect('/dashboard');
   } catch (err) {
-    res.render('register', { error: 'Error al registrar' });
+    console.error('ERROR REGISTER:', err);
+    res.render('register', { error: err.message });
   }
 });
 
