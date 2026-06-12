@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Login GimApp</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #1a1a2e; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+.card { background: white; padding: 2rem; border-radius: 12px; width: 100%; max-width: 400px; }
+h1 { text-align: center; color: #e94560; margin-bottom: 1.5rem; }
+label { display: block; margin-bottom: 0.3rem; font-weight: bold; }
+input { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 1rem; font-size: 1rem; }
+button { width: 100%; padding: 0.8rem; background: #e94560; color: white; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+.error { background: #fee; color: #c00; padding: 0.7rem; border-radius: 6px; margin-bottom: 1rem; }
+.link { text-align: center; margin-top: 1rem; }
+a { color: #e94560; }
+</style>
+</head>
+<body>
+<div class="card">
+<h1>GimApp</h1>
+<% if (error) { %><div class="error"><%= error %></div><% } %>
+<form action="/auth/login" method="POST">
+<label>Email</label>
+<input type="email" name="email" required>
+<label>Contrasena</label>
+<input type="password" name="password" required>
+<button type="submit">Iniciar sesion</button>
+</form>
+<div class="link"><a href="/auth/register">Registrate</a></div>
+</div>
+</body>
+</html>
