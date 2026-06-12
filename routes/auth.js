@@ -25,12 +25,12 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user || !(await user.comparePassword(password)))
-      return res.render('login', { error: 'Credenciales inválidas' });
+      return res.render('login', { error: 'Credenciales invalidas' });
     req.session.userId = user._id;
     req.session.userName = user.nombre;
     res.redirect('/dashboard');
   } catch (err) {
-    res.render('login', { error: 'Error al iniciar sesión' });
+    res.render('login', { error: err.message });
   }
 });
 
