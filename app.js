@@ -6,7 +6,7 @@ process.on('uncaughtException', err => {
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo').default || require('connect-mongo');
 const methodOverride = require('method-override');
 const path = require('path');
 
