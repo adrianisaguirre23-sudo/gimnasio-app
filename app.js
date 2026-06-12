@@ -8,13 +8,10 @@ const path = require('path');
 
 const app = express();
 
-// Conexión MongoDB
 mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('✅ MongoDB 7 conectado');
-  })
+  .then(() => console.log('✅ MongoDB 7 conectado'))
   .catch(err => console.error('❌ Error:', err));
-// Middlewares
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
@@ -28,17 +25,18 @@ app.use(session({
   cookie: { maxAge: 1000 * 60 * 60 * 24 }
 }));
 
-// Rutas
 app.use('/auth', require('./routes/auth'));
 app.use('/socios', require('./routes/socios'));
 app.use('/rutinas', require('./routes/rutinas'));
+
 app.get('/', (req, res) => {
   if (req.session.userId) return res.redirect('/dashboard');
   res.redirect('/auth/login');
 });
+
 app.get('/dashboard', require('./middleware/auth'), (req, res) => {
   res.render('dashboard', { user: req.session.userName });
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Servidor en puerto ${PORT}`));
+app.listen(PORT, () => console.log(`Servidor en puerto ${PORT}`));
